@@ -1,0 +1,149 @@
+#include <LiquidCrystal.h>
+
+
+LiquidCrystal lcd(7, 9, 6, 5, 4, 3, 2);
+int buzz = 8;
+const float A = 0.001129148;
+const float B = 0.000234125;
+const float C = 0.0000000876741;
+
+void setup() {
+  pinMode(12, OUTPUT);
+  pinMode(11, OUTPUT);
+  pinMode(10, OUTPUT);
+  Serial.begin(9600);
+  lcd.begin(16, 2);
+  pinMode(buzz, OUTPUT);
+  pinMode(A1, INPUT);
+}
+
+void loop() {
+  int valor = analogRead(A2);
+  Serial.println(valor);
+  int temp = analogRead(A1);
+  int lum = analogRead(A0);
+  Serial.println(lum);
+  Serial.println(temp);
+int sensorTempTensao = analogRead(A1);
+float tensao = sensorTempTensao * 5;
+tensao /= 1024; // resultado da tensao
+float tempC = (tensao - 0.5) * 100;
+float temperaturaF = (tempC * 9 / 5) + 32;
+int leiturasTemp = 0;
+  if (lum <= 650) {
+    digitalWrite(10, LOW);
+    digitalWrite(12, HIGH);
+    digitalWrite(11, LOW);
+    digitalWrite(buzz, LOW);
+    lcd.clear();
+    lcd.print("Luminosidade");
+    lcd.setCursor(0, 1);
+    lcd.print("adequada");
+  } 
+  else if (lum <= 950) {
+    digitalWrite(10, LOW);
+    digitalWrite(12, LOW);
+    digitalWrite(11, HIGH);
+    lcd.clear();
+    lcd.print("Alerta reduza a");
+    lcd.setCursor(0, 1);
+    lcd.print("Luminosidade");
+  } 
+  else{
+    digitalWrite(10, HIGH);
+    digitalWrite(11, LOW);
+    digitalWrite(12, LOW);
+    lcd.clear();
+    lcd.print("PERIGO!");
+    lcd.setCursor(0, 1);
+    lcd.print("Reduza a luz");
+    digitalWrite(buzz, HIGH);
+    delay(3000);
+    digitalWrite(buzz, LOW);
+    delay(2000);
+  }
+  
+  delay(5000);
+  
+  if(temp>=125 && temp<=135)
+  {
+    digitalWrite(10, LOW);
+    digitalWrite(12, HIGH);
+    digitalWrite(11, LOW);
+    digitalWrite(buzz, LOW);
+    lcd.print("Temp. OK");
+    lcd.setCursor(0, 1);
+    lcd.print("Temp: ");
+    lcd.setCursor(5,1);
+    lcd.print(tempC);
+  }
+   else if (temp>135)
+  {
+    digitalWrite(10, LOW);
+    digitalWrite(12, LOW);
+    digitalWrite(11, HIGH);
+    digitalWrite(buzz, HIGH);
+    lcd.clear();
+    lcd.print("Temp. Alta");
+    lcd.setCursor(0, 1);
+    lcd.print("Temp: ");
+    lcd.setCursor(5,1);
+    lcd.print(tempC);
+  } 
+   else
+  {
+    digitalWrite(10, LOW);
+    digitalWrite(12, LOW);
+    digitalWrite(11, HIGH);
+    digitalWrite(buzz, HIGH);
+    lcd.clear();
+    lcd.print("Temp. Baixa");
+    lcd.setCursor(0, 1);
+    lcd.print("Temp: ");
+    lcd.setCursor(5,1);
+    lcd.print(tempC);
+   }
+  delay(5000);
+  
+   if(valor>=400 && valor<=600)
+  {
+    digitalWrite(10, LOW);
+    digitalWrite(12, HIGH);
+    digitalWrite(11, LOW);
+    digitalWrite(buzz, LOW);
+    lcd.clear();
+    lcd.print("Umid. OK");
+    lcd.setCursor(0, 1);
+    lcd.print("Umid: ");
+    lcd.setCursor(5,1);
+    lcd.print(valor);
+  }
+   else if (valor>600)
+  {
+    digitalWrite(10, HIGH);
+    digitalWrite(12, LOW);
+    digitalWrite(11, LOW);
+    digitalWrite(buzz, HIGH);
+    lcd.clear();
+    lcd.print("Umid. Alta");
+    lcd.setCursor(0, 1);
+    lcd.print("Umid: ");
+    lcd.setCursor(5,1);
+    lcd.print(valor);
+  } 
+   else
+  {
+    digitalWrite(10, HIGH);
+    digitalWrite(12, LOW);
+    digitalWrite(11, LOW);
+    digitalWrite(buzz, HIGH);
+    lcd.clear();
+    lcd.print("Umid. Baixa");
+    lcd.setCursor(0, 1);
+    lcd.print("Umid: ");
+    lcd.setCursor(5,1);
+    lcd.print(valor);
+   }
+   delay(5000);
+  
+}
